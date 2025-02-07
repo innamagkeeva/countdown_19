@@ -1,0 +1,121 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body,
+h1,
+h2,
+p,
+ul,
+li {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+body {
+  background-color: black;
+  padding: 20px;
+}
+
+.countdown {
+  max-width: 1100px;
+  min-height: 600px;
+  background-color: white;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.countdown__desktop {
+  max-width: 140px;
+  width: 100%;
+  min-height: 41px;
+}
+
+.group {
+  max-width: 790px;
+  min-height: 227px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form {
+  width: 100%;
+  min-height: 92px;
+}
+
+.form__label {
+  width: 135px;
+  height: 24px;
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+
+.form__input,
+.input {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input {
+  width: 380px;
+  height: 50px;
+  margin-right: 30px;
+}
+
+.input__text {
+  width: 100%;
+  outline: 0;
+}
+
+.input__text::placeholder {
+  font-size: 18px;
+}
+
+.form__input-img {
+  width: 32px;
+  height: 30px;
+  padding-top: 10px;
+}
+
+.form__form-button {
+  width: 380px;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  background-color: blueviolet;
+  cursor: pointer;
+}
+
+.form__form-button-text {
+  color: white;
+  font-size: 18px;
+}
+
+.data {
+  width: 552px;
+  height: 95px;
+  font-size: 18px;
+}
+
+.data__text {
+  width: 233px;
+  height: 29px;
+}
+
+.data__data {
+  font-size: 45px;
+}
