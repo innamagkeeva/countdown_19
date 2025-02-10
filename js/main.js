@@ -1,8 +1,8 @@
 import UI from './UI.js'
 
-UI.FORM_BUTTON.addEventListener('click', startCountdown)
+UI.FORM.addEventListener('submit', startCountdown)
 
-let countdownInterval = null
+let countdownInterval // объявила переменную, в которую будет присваиваться значение каждого счета (интервала). и так же для очищения данных предыдущего счета.
 
 function startCountdown(event) {
   event.preventDefault()
@@ -32,10 +32,10 @@ function startCountdown(event) {
   countdownInterval = setInterval(() => {
     updateCountdown(targetDate)
   }, 1000)
-  setTimeout(() => {
-    clearInterval(countdownInterval)
-    UI.RESULT.textContent = 'Время истекло'
-  }, targetDate - currentDate)
+  // setTimeout(() => {
+  //   clearInterval(countdownInterval)
+  //   UI.RESULT.textContent = 'Время истекло'
+  // }, targetDate - currentDate)
 
   clearInput()
 }
