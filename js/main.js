@@ -1,4 +1,5 @@
 import UI from './UI.js'
+import { format } from 'date-fns'
 
 UI.FORM.addEventListener('submit', startCountdown)
 
@@ -7,7 +8,7 @@ let countdownInterval // объявила переменную, в котору�
 function startCountdown(event) {
   event.preventDefault()
 
-  const dateInput = UI.FORM_INPUT.value
+  const dateInput = UI.FORM_INPUT.value.trim()
   console.log('dateInput=', dateInput)
 
   if (!dateInput) {
@@ -16,11 +17,11 @@ function startCountdown(event) {
 
     return
   }
-  const targetDate = new Date(dateInput)
+  const targetDate = new Date(dateInput + 'T00:00:00')
   console.log('targetDate:', targetDate)
 
   const currentDate = new Date()
-  if (targetDate <= currentDate) {
+  if (isNaN(targetDate.getTime()) || targetDate <= currentDate) {
     UI.RESULT.textContent = 'Введите дату правильно'
     return
   }
@@ -32,10 +33,6 @@ function startCountdown(event) {
   countdownInterval = setInterval(() => {
     updateCountdown(targetDate)
   }, 1000)
-  // setTimeout(() => {
-  //   clearInterval(countdownInterval)
-  //   UI.RESULT.textContent = 'Время истекло'
-  // }, targetDate - currentDate)
 
   clearInput()
 }
@@ -43,6 +40,12 @@ function startCountdown(event) {
 function updateCountdown(targetDate) {
   const currentDate = new Date()
   const timeDifference = targetDate - currentDate
+
+  if (timeDifference <= 0) {
+    clearInterval(countdownInterval)
+    UI.RESULT.textContent = 'Время вышло!'
+    return
+  }
 
   const totalSeconds = Math.floor(timeDifference / 1000)
   const secondsInAnHour = 3600
@@ -55,7 +58,10 @@ function updateCountdown(targetDate) {
   const minutes = Math.floor((totalSeconds % secondsInAnHour) / 60)
   const seconds = Math.floor(totalSeconds % 60)
 
-  UI.RESULT.textContent = `Осталось: ${years} лет, ${days} дней, ${hours} часов, ${minutes} минут и ${seconds} секунд.`
+  const formattedTargetDate = format(targetDate, 'yyyy-MM-dd HH:mm:ss')
+  console.log(formattedDate)
+
+  UI.RESULT.textContent = `Осталось: ${years} лет, ${days} дней, ${hours} часов, ${minutes} минут и ${seconds} секунд. Целевая дата: ${formattedTargetDate}.`
 }
 
 function clearInput() {
