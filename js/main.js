@@ -11,13 +11,19 @@ function startCountdown(event) {
   const dateInput = UI.FORM_INPUT.value.trim()
   console.log('dateInput=', dateInput)
 
+  const day = dateInput[0] + dateInput[1]
+  const month = dateInput[2] + dateInput[3]
+  const year = dateInput.slice(4)
+  const newDate = `${year}-${month}-${day}`
+  console.log(newDate)
+
   if (!dateInput) {
     UI.RESULT.textContent = 'Введите дату'
     console.log('UI.RESULT.textContent=', 222)
 
     return
   }
-  const targetDate = new Date(dateInput + 'T00:00:00')
+  const targetDate = new Date(newDate)
   console.log('targetDate:', targetDate)
 
   const currentDate = new Date()
@@ -48,18 +54,19 @@ function updateCountdown(targetDate) {
   }
 
   const totalSeconds = Math.floor(timeDifference / 1000)
-  const secondsInAnHour = 3600
-  const secondsInADay = 86400
-  const secondsInAYear = 31536000
+  const SECONDS_IN_AN_HOUR = 3600
+  const SECONDS_IN_A_DAY = 86_400
+  const SECONDS_IN_A_YEAR = 31_536_000
 
-  const years = Math.floor(totalSeconds / secondsInAYear)
-  const days = Math.floor((totalSeconds % secondsInAYear) / secondsInADay)
-  const hours = Math.floor((totalSeconds % secondsInADay) / secondsInAnHour)
-  const minutes = Math.floor((totalSeconds % secondsInAnHour) / 60)
+  const years = Math.floor(totalSeconds / SECONDS_IN_A_YEAR)
+  const days = Math.floor((totalSeconds % SECONDS_IN_A_YEAR) / SECONDS_IN_A_DAY)
+  const hours = Math.floor(
+    (totalSeconds % SECONDS_IN_A_DAY) / SECONDS_IN_AN_HOUR
+  )
+  const minutes = Math.floor((totalSeconds % SECONDS_IN_AN_HOUR) / 60)
   const seconds = Math.floor(totalSeconds % 60)
 
   const formattedTargetDate = format(targetDate, 'yyyy-MM-dd HH:mm:ss')
-  console.log(formattedDate)
 
   UI.RESULT.textContent = `Осталось: ${years} лет, ${days} дней, ${hours} часов, ${minutes} минут и ${seconds} секунд. Целевая дата: ${formattedTargetDate}.`
 }
