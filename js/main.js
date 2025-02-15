@@ -3,6 +3,10 @@ import { format } from 'date-fns'
 
 UI.FORM.addEventListener('submit', startCountdown)
 
+if (localStorage.getItem('targetDate')) {
+  UI.FORM_INPUT.value = localStorage.getItem('targetDate')
+} // при перезагрузки страницы пользователь будет видеть последнюю дату, загружается из localStorage
+
 let countdownInterval // объявила переменную, в которую будет присваиваться значение каждого счета (интервала). и так же для очищения данных предыдущего счета.
 
 function startCountdown(event) {
@@ -23,8 +27,12 @@ function startCountdown(event) {
 
     return
   }
+
   const targetDate = new Date(newDate)
   console.log('targetDate:', targetDate)
+
+  // Сохраняем введенную дату в LocalStorage
+  localStorage.setItem('targetDate', dateInput)
 
   const currentDate = new Date()
   if (isNaN(targetDate.getTime()) || targetDate <= currentDate) {
