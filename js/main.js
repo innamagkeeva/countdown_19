@@ -1,18 +1,18 @@
 import UI from './UI.js'
 import { format } from 'date-fns'
 
-UI.FORM.addEventListener('submit', startCountdown)
+UI.FORM?.addEventListener('submit', startCountdown) // оператор ?. - обработчик события будет добавлен только в том случае, если UI.FORM определен.
 
 if (localStorage.getItem('targetDate')) {
-  UI.FORM_INPUT.value = localStorage.getItem('targetDate')
-} // при перезагрузки страницы пользователь будет видеть последнюю дату, загружается из localStorage
+  UI.FORM_INPUT.value = localStorage.getItem('targetDate') ?? ''
+} // при перезагрузки страницы пользователь будет видеть последнюю дату, загружается из localStorage /  оператор ?? '' означает, что вернется пустая строка, если нет значения.
 
 let countdownInterval // объявила переменную, в которую будет присваиваться значение каждого счета (интервала). и так же для очищения данных предыдущего счета.
 
 function startCountdown(event) {
   event.preventDefault()
 
-  const dateInput = UI.FORM_INPUT.value.trim()
+  const dateInput = UI.FORM_INPUT?.value.trim() // оператор ?. для того чтобы избежать ошибок, если UI.FORM_INPUT равен null или undefined.
   console.log('dateInput=', dateInput)
 
   const day = dateInput[0] + dateInput[1]
