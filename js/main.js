@@ -3,9 +3,8 @@ import { format } from 'date-fns'
 
 UI.FORM?.addEventListener('submit', startCountdown) // оператор ?. - обработчик события будет добавлен только в том случае, если UI.FORM определен.
 
-if (localStorage.getItem('targetDate')) {
-  UI.FORM_INPUT.value = localStorage.getItem('targetDate') ?? ''
-} // при перезагрузки страницы пользователь будет видеть последнюю дату, загружается из localStorage /  оператор ?? '' означает, что вернется пустая строка, если нет значения.
+UI.FORM_INPUT.value = localStorage.getItem('targetDate') ?? ''
+// при перезагрузки страницы пользователь будет видеть последнюю дату, загружается из localStorage /  оператор ?? '' означает, что если в localStorage значение null - то выводится пустая строка.
 
 let countdownInterval // объявила переменную, в которую будет присваиваться значение каждого счета (интервала). и так же для очищения данных предыдущего счета.
 
