@@ -52,6 +52,10 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.loader-style {
+  display: flex;
+}
+
 .form {
   width: 100%;
   min-height: 92px;
@@ -78,6 +82,7 @@ body {
 
 .input__text {
   width: 100%;
+  border: none;
   outline: 0;
 }
 

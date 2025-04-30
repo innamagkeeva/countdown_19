@@ -1,14 +1,24 @@
 import UI from './UI.js'
+import { format } from 'date-fns'
 
-UI.FORM_BUTTON.addEventListener('click', startCountdown)
+UI.FORM?.addEventListener('submit', startCountdown) // оператор ?. - обработчик события будет добавлен только в том случае, если UI.FORM определен.
 
-let countdownInterval = null
+UI.FORM_INPUT.value = localStorage.getItem('targetDate') ?? ''
+// при перезагрузки страницы пользователь будет видеть последнюю дату, загружается из localStorage /  оператор ?? '' означает, что если в localStorage значение null - то выводится пустая строка.
+
+let countdownInterval // объявила переменную, в которую будет присваиваться значение каждого счета (интервала). и так же для очищения данных предыдущего счета.
 
 function startCountdown(event) {
   event.preventDefault()
 
-  const dateInput = UI.FORM_INPUT.value
+  const dateInput = UI.FORM_INPUT?.value.trim() // оператор ?. для того чтобы избежать ошибок, если UI.FORM_INPUT равен null или undefined.
   console.log('dateInput=', dateInput)
+
+  const day = dateInput[0] + dateInput[1]
+  const month = dateInput[2] + dateInput[3]
+  const year = dateInput.slice(4)
+  const newDate = `${year}-${month}-${day}`
+  console.log(newDate)
 
   if (!dateInput) {
     UI.RESULT.textContent = 'Введите дату'
@@ -16,11 +26,15 @@ function startCountdown(event) {
 
     return
   }
-  const targetDate = new Date(dateInput)
+
+  const targetDate = new Date(newDate)
   console.log('targetDate:', targetDate)
 
+  // Сохраняем введенную дату в LocalStorage
+  localStorage.setItem('targetDate', dateInput)
+
   const currentDate = new Date()
-  if (targetDate <= currentDate) {
+  if (isNaN(targetDate.getTime()) || targetDate <= currentDate) {
     UI.RESULT.textContent = 'Введите дату правильно'
     return
   }
@@ -32,10 +46,6 @@ function startCountdown(event) {
   countdownInterval = setInterval(() => {
     updateCountdown(targetDate)
   }, 1000)
-  setTimeout(() => {
-    clearInterval(countdownInterval)
-    UI.RESULT.textContent = 'Время истекло'
-  }, targetDate - currentDate)
 
   clearInput()
 }
@@ -44,18 +54,28 @@ function updateCountdown(targetDate) {
   const currentDate = new Date()
   const timeDifference = targetDate - currentDate
 
-  const totalSeconds = Math.floor(timeDifference / 1000)
-  const secondsInAnHour = 3600
-  const secondsInADay = 86400
-  const secondsInAYear = 31536000
+  if (timeDifference <= 0) {
+    clearInterval(countdownInterval)
+    UI.RESULT.textContent = 'Время вышло!'
+    return
+  }
 
-  const years = Math.floor(totalSeconds / secondsInAYear)
-  const days = Math.floor((totalSeconds % secondsInAYear) / secondsInADay)
-  const hours = Math.floor((totalSeconds % secondsInADay) / secondsInAnHour)
-  const minutes = Math.floor((totalSeconds % secondsInAnHour) / 60)
+  const totalSeconds = Math.floor(timeDifference / 1000)
+  const SECONDS_IN_AN_HOUR = 3600
+  const SECONDS_IN_A_DAY = 86_400
+  const SECONDS_IN_A_YEAR = 31_536_000
+
+  const years = Math.floor(totalSeconds / SECONDS_IN_A_YEAR)
+  const days = Math.floor((totalSeconds % SECONDS_IN_A_YEAR) / SECONDS_IN_A_DAY)
+  const hours = Math.floor(
+    (totalSeconds % SECONDS_IN_A_DAY) / SECONDS_IN_AN_HOUR
+  )
+  const minutes = Math.floor((totalSeconds % SECONDS_IN_AN_HOUR) / 60)
   const seconds = Math.floor(totalSeconds % 60)
 
-  UI.RESULT.textContent = `Осталось: ${years} лет, ${days} дней, ${hours} часов, ${minutes} минут и ${seconds} секунд.`
+  const formattedTargetDate = format(targetDate, 'yyyy-MM-dd HH:mm:ss')
+
+  UI.RESULT.textContent = `Осталось: ${years} лет, ${days} дней, ${hours} часов, ${minutes} минут и ${seconds} секунд. Целевая дата: ${formattedTargetDate}.`
 }
 
 function clearInput() {
